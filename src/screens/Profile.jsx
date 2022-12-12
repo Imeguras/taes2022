@@ -2,6 +2,7 @@ import React from "react";
 import TextInput from "../components/TextInput";
 import { capitalize, phoneRegExp, plateRegExp } from "../helpers/helper";
 import { View, ScrollView } from "react-native";
+import { Text, Checkbox, Card } from "react-native-paper";
 import { useState } from "react";
 import * as yup from "yup";
 import { db } from "../../firebase";
@@ -10,6 +11,7 @@ import { useToast } from "react-native-styled-toast";
 import Loading from "../components/Loading";
 import { Formik } from "formik";
 import Button from "../components/Button";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const reviewSchema = yup.object({
   name: yup
@@ -29,7 +31,30 @@ const reviewSchema = yup.object({
     .required(),
 });
 
-export default function Profile({ route }) {
+export default function Profile({ route, navigation }) {
+	const  [notifationsBool, setNotifationsBool] = useState(true);
+
+ const subscribeToNotifications = async () => {
+	//Too tired to solve this... just deal with it for now
+	if(!notifationsBool){
+		AsyncStorage.getItem("@fcmToken").then((res) => {
+			setTkn(res);
+			messaging().subscribeToTopic(user.id).then().catch((error) => alert(error))
+		  });
+		alert("You will now receive notifications for new orders")
+	}
+	else{
+		messaging().unsubscribeFromTopic(user.id).then().catch((error) => alert(error))
+
+		alert("You will no longer receive notifications for new orders")
+	}
+}
+ const fetchSettings= async () =>{
+	await AsyncStorage.getItem("@notifationsBool").then((res) => {
+		let k = res === "true";
+		setNotifationsBool(k);
+	}).catch((error) => alert(error));
+  }
   const [isLoading, setLoading] = useState(false);
   const { toast } = useToast();
 
@@ -109,6 +134,30 @@ export default function Profile({ route }) {
         )}
       </Formik>
       {isLoading && <Loading />}
+	  <Card>
+	  <Card.Title
+              title="Settings"></Card.Title>
+	  <View style={{ flexDirection: "column", paddingHorizontal: 25 }} >
+		<View style={{ flexDirection: "row" }}>
+			<Checkbox
+				status={notifationsBool ? "checked" : "unchecked"}
+				onPress={() => {
+					let k = !notifationsBool;
+				AsyncStorage.setItem("@notifationsBool", ""+k).then(
+					() => {
+						setNotifationsBool(k);
+						subscribeToNotifications();
+						
+				}).catch((error) => alert(error));
+				}}
+			></Checkbox>
+			<Text>Enable/Disable Notifications </Text>
+		</View>
+		<Button mode="contained" onPress={()=>{navigation.navigate("NotificationHistory", {"id":route.params.user.id} )}}>Notification History</Button>
+	      
+	  </View>
+	  </Card>
+	  
     </ScrollView>
   );
 }

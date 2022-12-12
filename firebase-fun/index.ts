@@ -5,6 +5,7 @@ const FCM = require('fcm-notification');
 const serverKey='./privatekey.json';
 const fcm = new FCM(serverKey);
 // Firebase configuration
+  
 const firebaseConfig = {
 	apiKey: "AIzaSyAO9FQOrl-DzEwFJBN9RR59T-lxn8RsoB4",
 	authDomain: "fastugadriver-taes.firebaseapp.com",
@@ -51,7 +52,7 @@ getCanceledOrders().then((orders) => {
 	db.collection("notifications").add({
 	  causeOrder: order.id,
 	  created_on: new Date(),
-	  message: "A tua encomenda foi cancelada porque: " + order.cancel_justification,
+	  message: "Your order was canceled due to: " + order.cancel_justification,
 	  owner: order.assigned_driver,
 	});
 	addressOrder(order).catch((error) => {
@@ -61,15 +62,15 @@ getCanceledOrders().then((orders) => {
 	console.log("Sending notification to: "+order.assigned_driver)
 	const message = {
 		notification: {
-			title: "Encomenda "+order.id.slice(0,6)+" cancelada",
-			body: "A tua encomenda foi cancelada porque: " + order.cancel_justification,
+			title: "Order "+order.id.slice(0,6)+" was cancelled",
+			body: "Your order was canceled due to: " + order.cancel_justification,
 			
 		}, 
 		android: {
 		  priority: "HIGH",
 		  notification: {
-			title: "Encomenda "+order.id.slice(0,6)+" cancelada",
-			body: "A tua encomenda foi cancelada porque: " + order.cancel_justification,
+			title: "Order "+order.id.slice(0,6)+" was cancelled",
+			body: "Your order was canceled due to: " + order.cancel_justification,
 			
 		  }
 
@@ -98,7 +99,7 @@ getPickupOrders().then((orders) => {
 		db.collection("notifications").add({
 		  causeOrder: order.id,
 		  created_on: new Date(),
-		  message: "A encomenda "+order.id.slice(0,6)+" está pronta para ser recolhida",
+		  message: "Order "+order.id.slice(0,6)+" is ready for pickup!",
 		  owner: order.assigned_driver,
 		});
 		addressOrder(order).catch((error) => {
@@ -107,14 +108,14 @@ getPickupOrders().then((orders) => {
 		const message = {
 			notification: {
 				title: "Pickup! Order: "+order.id.slice(0,6),
-				body: "A encomenda "+order.id.slice(0,6)+" está pronta para ser recolhida",
+				body: "Order "+order.id.slice(0,6)+" is ready for pickup!",
 				
 			}, 
 			android: {
 			  priority: "HIGH",
 			  notification: {
 				title: "Pickup! Order: "+order.id.slice(0,6),
-				body: "A encomenda "+order.id.slice(0,6)+" está pronta para ser recolhida",
+				body: "Order "+order.id.slice(0,6)+" is ready for pickup!",
 			  },
 			},
 			topic: order.assigned_driver,

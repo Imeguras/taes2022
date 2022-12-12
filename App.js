@@ -34,7 +34,7 @@ export default function App() {
 	if(enabled){
 		console.log('Auth status:', authStatus); 
 	}
-  }
+  }	
   useEffect(() => {
     try {
       AsyncStorage.getItem("@userData").then((data) =>
