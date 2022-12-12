@@ -80,7 +80,7 @@ export default function App() {
               component={DashboardScreen}
               options={{ headerShown: false }}
             />
-			<Stack.Screen name="NotificationHistory" component={NotificationHistoryScreen} />
+			<Stack.Screen name="NotificationHistory" options={{ title: "Notification History" }} component={NotificationHistoryScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </ToastProvider>

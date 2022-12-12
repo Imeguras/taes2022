@@ -5,6 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "clear": "rm index.js",
+	"notificationsClean": "tsc clean.ts && node clean.js",
     "serve": "tsc index.ts && node index.js"
   },
   "author": "",

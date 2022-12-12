@@ -53,7 +53,8 @@ export default function Dashboard({ route, navigation }) {
 
   async function fetchSettings() {
 	await AsyncStorage.getItem("@notifationsBool").then((res) => {
-		setNotifationsBool(res);
+		let k = res === "true";
+		setNotifationsBool(k);
 	}).catch((error) => alert(error));
   }
   //on drag down refresh page
@@ -167,15 +168,24 @@ export default function Dashboard({ route, navigation }) {
   function viewOrderDetails(order) {
     navigation.navigate("OrderDetails", order);
   }
+  const subscribeToNotifications = async () => {
+	//Too tired to solve this... just deal with it for now
+	if(!notifationsBool){
+		AsyncStorage.getItem("@fcmToken").then((res) => {
+			setTkn(res);
+			messaging().subscribeToTopic(user.id).then().catch((error) => alert(error))
+		  });
+		alert("You will now receive notifications for new orders")
+	}
+	else{
+		messaging().unsubscribeFromTopic(user.id).then().catch((error) => alert(error))
 
+		alert("You will no longer receive notifications for new orders")
+	}
+}
   useEffect(() => {
     refresh();
-	if(notifationsBool){
-	AsyncStorage.getItem("@fcmToken").then((res) => {
-		setTkn(res);
-		messaging().subscribeToTopic(user.id).then().catch((error) => alert(error))
-	  });
-	}
+	subscribeToNotifications();
   }, []);
   
   return (
@@ -206,8 +216,12 @@ export default function Dashboard({ route, navigation }) {
             status={notifationsBool ? "checked" : "unchecked"}
             onPress={() => {
 				let k = !notifationsBool;
-			  AsyncStorage.setItem("@notifationsBool", k);
-              setNotifationsBool(k);
+			  AsyncStorage.setItem("@notifationsBool", ""+k).then(
+				() => {
+					setNotifationsBool(k);
+					subscribeToNotifications();
+			  		
+			  }).catch((error) => alert(error));
             }}
 		></Checkbox>
             <IconButton
@@ -287,7 +301,7 @@ export default function Dashboard({ route, navigation }) {
           </Card>
 		  <Card style={styles.card}>
 			<Card.Title title="TODO style this somewhere" titleStyle={styles.cardTitle} />
-				<Button onPress={()=>{navigation.replace("NotificationHistory", {"id":user} )}} textColor={theme.colors.primary}>Notification History</Button>
+				<Button onPress={()=>{navigation.navigate("NotificationHistory", {"id":user} )}} textColor={theme.colors.primary}>Notification History</Button>
 	      </Card>
           <Portal>
             <Dialog
