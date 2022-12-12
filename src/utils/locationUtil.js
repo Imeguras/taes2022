@@ -25,9 +25,16 @@ export function getCoordsDistanceFromRestaurant(coords) {
       getDistance(
         coords.latitude,
         coords.longitude,
-        39.73447231382876,
-        -8.821027283140435
+        FASTUGA_LOCATION.latitude,
+        FASTUGA_LOCATION.longitude
       ) * 10
     ) / 10
   );
 }
+
+export const FASTUGA_LOCATION = {
+  latitude: 39.73447231382876,
+  longitude: -8.821027283140435,
+};
+
+export const GOOGLE_MAPS_APIKEY = "AIzaSyBDg9iVKHgE7xKL-JTH-Z6p8b5zs1cbGDc";

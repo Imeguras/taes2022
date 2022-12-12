@@ -1,17 +1,14 @@
 import React from "react";
-import { View } from "react-native";
-import { Button, IconButton, List, Text } from "react-native-paper";
+import { StyleSheet, View } from "react-native";
+import { Badge, Button, IconButton, List, Text } from "react-native-paper";
 import { theme } from "../core/theme";
-
 import {
-  PREPARING,
-  DELIVERED,
-  DELIVERING,
-  DELIVERY_PROBLEM,
   formatOrders,
   getOrderStatusText,
   updateOrderAPI,
+  calculateOrderEarnings,
 } from "../stores/orders";
+import { DELIVERED, DELIVERING, PREPARING } from "../utils/utils";
 
 export default class OrderList extends React.Component {
   async updateOrder(order, newStatus, user) {
@@ -39,15 +36,31 @@ export default class OrderList extends React.Component {
             title={order.key.slice(0, 16)}
             descriptionStyle={{ fontWeight: "bold" }}
             onPress={() => this.pressOrderItem(order)}
-            description={`${getOrderStatusText(order.status)} • ${
-              order.distance
-            } km`}
+            disabled={this.props.isLoading}
+            description={() => (
+              <View style={{ flexDirection: "row" }}>
+                <Text style={{ fontWeight: "700" }}>
+                  {getOrderStatusText(order.status)}
+                </Text>
+                <Badge style={{ ...styles.badge, backgroundColor: "grey" }}>
+                  {order.distance} km
+                </Badge>
+                <Badge
+                  style={{
+                    ...styles.badge,
+                    backgroundColor: theme.colors.primary,
+                  }}
+                >
+                  {calculateOrderEarnings(order.distance)}€
+                </Badge>
+              </View>
+            )}
             right={() =>
               order.assigned ? (
                 order.status == PREPARING ? (
                   <View />
                 ) : order.status == DELIVERING ? (
-                  <View style={{ flexDirection: "row" }}>
+                  <View style={{ flexDirection: "row", marginRight: -15 }}>
                     <IconButton
                       icon="close"
                       size={23}
@@ -55,6 +68,7 @@ export default class OrderList extends React.Component {
                       containerColor="red"
                       iconColor="white"
                       onPress={() => this.props.cancelCallback(order)}
+                      disabled={this.props.isLoading}
                     />
                     <IconButton
                       icon="check"
@@ -63,20 +77,21 @@ export default class OrderList extends React.Component {
                       containerColor="green"
                       iconColor="white"
                       onPress={() => this.updateOrder(order, DELIVERED, user)}
+                      disabled={this.props.isLoading}
                     />
                   </View>
                 ) : (
-                  <Button
-                    mode="contained"
-                    buttonColor={theme.colors.secondary}
-                    onPress={() => this.updateOrder(order, DELIVERING, user)}
-                    labelStyle={{
-                      marginLeft: 12,
-                      marginRight: 12,
-                    }}
-                  >
-                    Picked up
-                  </Button>
+                  <View style={{ marginRight: -10 }}>
+                    <Button
+                      mode="contained"
+                      buttonColor={theme.colors.secondary}
+                      onPress={() => this.updateOrder(order, DELIVERING, user)}
+                      disabled={this.props.isLoading}
+                      labelStyle={{ marginLeft: 12, marginRight: 12 }}
+                    >
+                      Picked up
+                    </Button>
+                  </View>
                 )
               ) : (
                 <Button
@@ -84,6 +99,7 @@ export default class OrderList extends React.Component {
                   mode="contained"
                   buttonColor={theme.colors.primary}
                   onPress={() => this.updateOrder(order, "", user)}
+                  disabled={this.props.isLoading}
                   style={{ marginRight: -12 }}
                 >
                   Assign!
@@ -100,3 +116,12 @@ export default class OrderList extends React.Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  badge: {
+    paddingHorizontal: 5,
+    marginBottom: -1,
+    marginLeft: 5,
+    fontWeight: "700",
+  },
+});

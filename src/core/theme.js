@@ -1,5 +1,3 @@
-import { DefaultTheme } from "react-native-paper";
-
 export const theme = {
   colors: {
     text: "#000000",
@@ -29,6 +27,26 @@ export const successToast = (message) => {
       borderLeftWidth: 8,
       borderTopLeftRadius: 8,
       borderBottomLeftRadius: 8,
+      bg: theme.colors.elevation.level2,
+    },
+  };
+};
+
+export const errorToast = (message) => {
+  return {
+    message: message,
+    iconSize: 36,
+    iconColor: "red",
+    iconName: "alert-circle-outline",
+    iconFamily: "mdi",
+    toastStyles: {
+      borderRadius: 16,
+      borderWidth: 0,
+      borderLeftColor: "red",
+      borderLeftWidth: 8,
+      borderTopLeftRadius: 8,
+      borderBottomLeftRadius: 8,
+      bg: theme.colors.elevation.level2,
     },
   };
 };

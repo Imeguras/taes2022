@@ -1,17 +1,32 @@
-import { View, StyleSheet, ScrollView } from "react-native";
-import { Card, Text } from "react-native-paper";
-import { theme } from "../core/theme";
+import { View, StyleSheet, ScrollView, SafeAreaView } from "react-native";
+import { Button, Card, FAB, Provider, Text } from "react-native-paper";
+import { errorToast, theme } from "../core/theme";
 import { getOrderStatusText } from "../stores/orders";
 import { db } from "../../firebase";
 import { useEffect, useState } from "react";
 import Maps from "../components/Maps";
+import * as Location from "expo-location";
+import { useToast } from "react-native-styled-toast";
+import { order } from "styled-system";
 
-export default function OrderDetails({ route }) {
+export default function OrderDetails({ route, navigation }) {
   const [customer, setCustomer] = useState({});
 
   useEffect(() => {
-    fetchCustomerData();
+    (async () => {
+      await getLocation();
+      await fetchCustomerData();
+    })();
   }, []);
+
+  const { toast } = useToast();
+  async function getLocation() {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      toast(errorToast("Location Permission not granted"));
+      return navigation.goBack();
+    }
+  }
 
   async function fetchCustomerData() {
     await db
@@ -48,7 +63,22 @@ export default function OrderDetails({ route }) {
           </View>
         </View>
       </Card>
-      <Maps order={route.params} customer={customer} />
+      <Maps
+        viewDirectionsCallback={() => {
+          const order = route.params;
+          navigation.navigate("MapDirections", {
+            name:
+              order.status == 2
+                ? `Picking-up Order (${order.number_items} ${
+                    order.number_items == 1 ? "item" : "items"
+                  })`
+                : `Delivering to ${customer.name}`,
+            data: order,
+          });
+        }}
+        order={route.params}
+        customer={customer}
+      />
     </ScrollView>
   );
 }

@@ -12,7 +12,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Loading from "../components/Loading";
 
 export default function LoginScreen({ navigation }) {
-  var [stayLogged, setStayLogged] = useState(false);
+  var [stayLogged, setStayLogged] = useState(true);
   const [email, setEmail] = useState({ value: "", error: "" });
   const [password, setPassword] = useState({ value: "", error: "" });
   const [isLoading, setLoading] = useState(false);
