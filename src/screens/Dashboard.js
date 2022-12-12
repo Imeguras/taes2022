@@ -5,6 +5,7 @@ import OrderList from "../components/OrderList";
 import messaging from "@react-native-firebase/messaging"; 
 import {
   Card,
+  Checkbox, 
   Divider,
   ProgressBar,
   Button,
@@ -43,12 +44,18 @@ export default function Dashboard({ route, navigation }) {
   const [refreshing, setRefreshing] = useState(false);
 
   const [visible, setVisible] = useState(false);
-  const [notifationsBool, setNotifationsBool] = useState(false);
+  const [notifationsBool, setNotifationsBool] = useState(true);
   const showDialog = () => setVisible(true);
   const hideDialog = () => setVisible(false);
   const [justification, setJustification] = useState({ value: "", error: "" });
   const [orderBeingCancelled, setOrderBeingCancelled] = useState(null);
 
+
+  async function fetchSettings() {
+	await AsyncStorage.getItem("@notifationsBool").then((res) => {
+		setNotifationsBool(res);
+	}).catch((error) => alert(error));
+  }
   //on drag down refresh page
   async function fetchPrivateInfo() {
     try {
@@ -67,14 +74,6 @@ export default function Dashboard({ route, navigation }) {
             setUser({ ...snapshot.data(), id: userID });
           }
 		  
-		  AsyncStorage.getItem("@fcmToken").then((res) => {
-			setTkn(res);
-			//TOdo check if subscribed instead of this
-			
-			//messaging().unsubscribeFromTopic(res, user.id).then().catch((error) => alert(error))
-
-			messaging().subscribeToTopic(user.id).then((message) => alert("subbed to "+user.id+" "+message)).catch((error) => alert(error))
-		  });
 		  
           await fetchDriverOrdersAPI(snapshot.id).then((orders) => {
             setSelfOrder(
@@ -144,7 +143,9 @@ export default function Dashboard({ route, navigation }) {
   }
 
   const logout = (navigation) => {
+	messaging().unsubscribeFromTopic(user.id).then().catch((error) => alert(error))
     AsyncStorage.removeItem("@userData");
+
     navigation.replace("Login");
   };
 
@@ -160,6 +161,7 @@ export default function Dashboard({ route, navigation }) {
   async function refresh() {
     await fetchPrivateInfo();
     await getUnassignedOrders();
+	await fetchSettings();
   }
 
   function viewOrderDetails(order) {
@@ -168,6 +170,12 @@ export default function Dashboard({ route, navigation }) {
 
   useEffect(() => {
     refresh();
+	if(notifationsBool){
+	AsyncStorage.getItem("@fcmToken").then((res) => {
+		setTkn(res);
+		messaging().subscribeToTopic(user.id).then().catch((error) => alert(error))
+	  });
+	}
   }, []);
   
   return (
@@ -193,6 +201,15 @@ export default function Dashboard({ route, navigation }) {
             <Text style={styles.helloText}>{`Hello, ${
               user && user.name ? user.name.split(" ")[0] : "... "
             }! 👋`}</Text>
+			<Checkbox
+            
+            status={notifationsBool ? "checked" : "unchecked"}
+            onPress={() => {
+				let k = !notifationsBool;
+			  AsyncStorage.setItem("@notifationsBool", k);
+              setNotifationsBool(k);
+            }}
+		></Checkbox>
             <IconButton
               icon="logout-variant"
               size={24}
@@ -268,7 +285,10 @@ export default function Dashboard({ route, navigation }) {
               ></OrderList>
             </Card.Content>
           </Card>
-
+		  <Card style={styles.card}>
+			<Card.Title title="TODO style this somewhere" titleStyle={styles.cardTitle} />
+				<Button onPress={()=>{navigation.replace("NotificationHistory", {"id":user} )}} textColor={theme.colors.primary}>Notification History</Button>
+	      </Card>
           <Portal>
             <Dialog
               visible={visible}

@@ -40,8 +40,7 @@ export default function NotificationHistory({ route, navigation }) {
 		refresh();
 	})
 	async function refresh() {
-		let t= fetchNotifications();
-		await t;
+		await fetchNotifications();
 	}
 	const onRefresh= async () => {
 		setRefreshing(true);
@@ -58,7 +57,7 @@ export default function NotificationHistory({ route, navigation }) {
 				/>
 		}	
 	  >
-						
+		<View>
 			<Card>
 				{notifications.map((notification, index) => (
 					<View key={index}>
@@ -68,6 +67,8 @@ export default function NotificationHistory({ route, navigation }) {
 					</View>
 				))}
 			</Card>
+		</View>
+		
 		</ScrollView>
 		</SafeAreaView>
 	)
