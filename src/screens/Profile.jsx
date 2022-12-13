@@ -51,12 +51,12 @@ export default function Profile({ route, navigation }) {
 	if(!notifationsBool){
 		//AsyncStorage.getItem("@fcmToken").then((res) => {
 			//setTkn(res);
-		messaging().subscribeToTopic(user.id).then(()=>alert("You will now receive notifications for new orders")).catch((error) => alert(error))
+		messaging().subscribeToTopic(route.params.user.id).then(()=>alert("You will now receive notifications for new orders")).catch((error) => alert(error))
 		  //});
 		
 	}
 	else{
-		messaging().unsubscribeFromTopic(user.id).then(()=>alert("You will no longer receive notifications for new orders")).catch((error) => alert(error))
+		messaging().unsubscribeFromTopic(route.params.user.id).then(()=>alert("You will no longer receive notifications for new orders")).catch((error) => alert(error))
 
 		
 	}

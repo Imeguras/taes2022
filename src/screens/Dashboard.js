@@ -55,11 +55,9 @@ export default function Dashboard({ route, navigation }) {
  const subscribeToNotifications = async () => {
 	  //Too tired to solve this... just deal with it for now
 	  if(!notifationsBool){
-		  AsyncStorage.getItem("@fcmToken").then((res) => {
-			  setTkn(res);
+		  
 			 messaging().subscribeToTopic(user.id).then().catch((error) => alert(error))
-			});
-		  //alert("You will now receive notifications for new orders")
+		//alert("You will now receive notifications for new orders")
 	  }
 	  else{
 		  messaging().unsubscribeFromTopic(user.id).then().catch((error) => alert(error))
