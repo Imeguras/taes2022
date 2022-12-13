@@ -1,9 +1,8 @@
-import React from "react";
+import { React, useEffect, useState } from "react";
 import TextInput from "../components/TextInput";
 import { capitalize, phoneRegExp, plateRegExp } from "../helpers/helper";
 import { View, ScrollView } from "react-native";
-import { Text, Checkbox, Card } from "react-native-paper";
-import { useState } from "react";
+import {  Text, Checkbox, Card } from "react-native-paper";
 import * as yup from "yup";
 import { db } from "../../firebase";
 import { successToast } from "../core/theme";
@@ -12,6 +11,8 @@ import Loading from "../components/Loading";
 import { Formik } from "formik";
 import Button from "../components/Button";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import messaging from "@react-native-firebase/messaging"; 
+
 
 const reviewSchema = yup.object({
   name: yup
@@ -32,31 +33,36 @@ const reviewSchema = yup.object({
 });
 
 export default function Profile({ route, navigation }) {
-	const  [notifationsBool, setNotifationsBool] = useState(true);
+	
+  const  [notifationsBool, setNotifationsBool] = useState(true);
+  const [isLoading, setLoading] = useState(false);
 
- const subscribeToNotifications = async () => {
-	//Too tired to solve this... just deal with it for now
-	if(!notifationsBool){
-		AsyncStorage.getItem("@fcmToken").then((res) => {
-			setTkn(res);
-			messaging().subscribeToTopic(user.id).then().catch((error) => alert(error))
-		  });
-		alert("You will now receive notifications for new orders")
-	}
-	else{
-		messaging().unsubscribeFromTopic(user.id).then().catch((error) => alert(error))
-
-		alert("You will no longer receive notifications for new orders")
-	}
-}
- const fetchSettings= async () =>{
+  const { toast } = useToast();
+  const fetchSettings= async () =>{
 	await AsyncStorage.getItem("@notifationsBool").then((res) => {
 		let k = res === "true";
 		setNotifationsBool(k);
 	}).catch((error) => alert(error));
+
   }
-  const [isLoading, setLoading] = useState(false);
-  const { toast } = useToast();
+  fetchSettings(); 
+  const subscribeToNotifications = async () => {
+	//Too tired to solve this... just deal with it for now
+	if(!notifationsBool){
+		//AsyncStorage.getItem("@fcmToken").then((res) => {
+			//setTkn(res);
+		messaging().subscribeToTopic(user.id).then(()=>alert("You will now receive notifications for new orders")).catch((error) => alert(error))
+		  //});
+		
+	}
+	else{
+		messaging().unsubscribeFromTopic(user.id).then(()=>alert("You will no longer receive notifications for new orders")).catch((error) => alert(error))
+
+		
+	}
+}
+ 
+  	
 
   const onEditPress = (form) => {
     setLoading(true);

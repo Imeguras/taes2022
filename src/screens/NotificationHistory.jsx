@@ -16,14 +16,13 @@ export default function NotificationHistory({ route, navigation }) {
 	const [notifications, setNotifications] = useState([]);
 	//TODO "Store" this
 	async function fetchNotifications() {
-		
+	
 		// fetch notifications on collection notifications where owner == user
-		t=query(
+		var t=query(
 			collection(db, "notifications"),
-			where("owner", "==", user.id))
+			where("owner", "==", user))
 		getDocs(t).then((querySnapshot) => {
 				let temp = [];
-				
 				
 				querySnapshot.forEach((doc) => {
 				//setNotifications(temp);

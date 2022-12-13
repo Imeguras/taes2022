@@ -57,14 +57,14 @@ export default function Dashboard({ route, navigation }) {
 	  if(!notifationsBool){
 		  AsyncStorage.getItem("@fcmToken").then((res) => {
 			  setTkn(res);
-			  messaging().subscribeToTopic(user.id).then().catch((error) => alert(error))
+			 messaging().subscribeToTopic(user.id).then().catch((error) => alert(error))
 			});
-		  alert("You will now receive notifications for new orders")
+		  //alert("You will now receive notifications for new orders")
 	  }
 	  else{
 		  messaging().unsubscribeFromTopic(user.id).then().catch((error) => alert(error))
   
-		  alert("You will no longer receive notifications for new orders")
+		  //alert("You will no longer receive notifications for new orders")
 	  }
   }
 const fetchSettings= async () =>{
