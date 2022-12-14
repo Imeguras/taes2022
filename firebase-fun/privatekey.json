@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "fastugadriver-taes",
+  "private_key_id": "87314646da198333efc48896b9ba3a2be8dde08b",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCragMp5PS2zMIS\niQ8YbxIg4p0zEdiTuvW1MD0lwsRFClnWM1Hv2tE8RvQq/zh+QMeiphANjYUcbp3n\npsmIm/4D4FbLro0IawVhlIV3ycd2j4V1AuQ085vSjObyMpdKgfixIQboIzhFmr9Z\nKh/dWdzstab3aSsz9jtjY8TVQwUI/+dyqqidQnfmIuqLJUCSDHtCNqDnAN9sCdPk\nQZzGPip8SAMj72iJDvu8F29iB2SipoVEl/SsbbPiIupqZhPJilg5PCD52ehBwFbe\n68LPMaV4GW5HQjGmb2v9QnUQYF8pfaQlJZK6ixOQ9YiD6ermBhMW70a8ff1V3ZH/\ny3ZybT97AgMBAAECggEACX/J+20zPIVzWdNGRrcyXNKCHf2RWs/OZFiZ2DkHZxYQ\nQsURojD7oxNW3k0fedZS2d90XfPnmlrs8un0xYEeM2PKxjspmKZUTtiMCZvhKwpV\naIByWhbdSJlDW8z+7QOaibeyqh74NC9DsbLFFPSxFV2/CiXwss6knY4+rwd+72/R\nBr89WBoJWDpseBPerH5ETiBvl75aphWldAp+uvaHFvgnN1T4crL7w1ue6dIDEuve\neX01qoN+78MapplENJbx8VAc6CMSQWjswxcyq3mNHxLVsFeRw13dZEZeJSk3r/gn\neEe39BHYd8NyBSEZsNghPrrlk4kLS8l0dLnN4cleqQKBgQDoZSXxgbEd109Uxy7r\nLP2tplJnMcyxgk6SALTViHy2yf/OU70CESNtQ/LMQs75h9LbVwtUbw3R3oyqbVXo\naXbO+xfk/sM6ExodppgxSj0sA+0azODLfMCInIz8xDTeQs6ytS34AitGPYskU51a\nyINeUaS4/WcoPL7d1rmhyJMFiQKBgQC80zTMlRjhUS8BbHyJUZV4++0IXY5UQD8I\nHGPmVE4qV6EdFVsTU+3fn6vlXHTAbFmZFGAIDXR1AonZqUJM0fZXEo17Cb1nRda+\nBJpa5xH3gC7DTma/rNQWabCElXmmYzARv7j+ptA9PbYiUAKWQGooiIVOpCF/7O4M\nz0L3AhXf4wKBgQDBEsfjTYyI7kjKdnFUkZxwmK39bjJRh6EfS9bxUOPMOSZ9lLSC\n8xorvTgK27Z5OY7FDBwtmdYxdmQHc67b2EMM0y+W4NHxfc1EtRPcX4FTADANBAn/\nBTYwSWAY4CnMPlTbxArc8XBiet8O3yjsM4pw4gOobV823sD0LWEsOCdtgQKBgB9Q\nFw1mHD4hLF5cEzriYJszi9c7TIMENG+v5ZEood27smgURoop/OR8ohDjCClwzlro\nWhR7xrgwt5N00h3TI7rExNmGf/ZESpwwPzib4QreIuMYeUmH65Pb6v3Rm97PzATl\nelQgbZ/6P93ozsUD4ZbfLNwhs7x3GfLd3AkCO4ZpAoGBAJwSPtrOOA8g97ccBahX\nuaq55G2Q8/KQ8vsJi3jt4fnBOmWkRxcIrc5N6+0EWgcBHb2Srahhs7Y2xO7pv9RP\n6zqVpU4OY6cFZ/L//xPtUT0WAG+rHxPcM6W44RSsiDCY8yNO2jPOm9YSuHjwSEV6\nQV99wbIa48qzmVtO58akiuYm\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-2fsam@fastugadriver-taes.iam.gserviceaccount.com",
+  "client_id": "112726109664116841990",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-2fsam%40fastugadriver-taes.iam.gserviceaccount.com"
+}
