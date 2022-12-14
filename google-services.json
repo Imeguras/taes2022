@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "169236192365",
+    "project_id": "fastugadriver-taes",
+    "storage_bucket": "fastugadriver-taes.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:169236192365:android:c569dee05c1d470b353364",
+        "android_client_info": {
+          "package_name": "com.grupoDD.FasTugaDriver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "169236192365-2j6gmf7mf55gbulp4k7o2jseh1o5q1kv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.grupoDD.FasTugaDriver",
+            "certificate_hash": "bb91e2a6207af7910c4f33495429a3787b454d69"
+          }
+        },
+        {
+          "client_id": "169236192365-6cr2dmb71p3i6c5it6h8bf7o3k8f9rrk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.grupoDD.FasTugaDriver",
+            "certificate_hash": "ff039cfb5add9e51674d629ccff069d63cdf0880"
+          }
+        },
+        {
+          "client_id": "169236192365-uklev5k1f5opjrpfon3jkftge7lpi0mg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsFY1sWLUopjYVQtheQsFMsu2sLPavI5k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "169236192365-uklev5k1f5opjrpfon3jkftge7lpi0mg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

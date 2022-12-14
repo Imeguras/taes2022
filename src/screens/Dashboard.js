@@ -2,8 +2,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StatusBar } from "expo-status-bar";
 import { React, useEffect, useState } from "react";
 import OrderList from "../components/OrderList";
+import messaging from "@react-native-firebase/messaging"; 
 import {
   Card,
+  Checkbox, 
   Divider,
   ProgressBar,
   Button,
@@ -29,6 +31,7 @@ import {
 } from "../stores/orders";
 import TextInput from "../components/TextInput";
 import { DELIVERY_PROBLEM } from "../utils/utils";
+
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
@@ -37,15 +40,39 @@ export default function Dashboard({ route, navigation }) {
   const [user, setUser] = useState(null);
   const [order, setOrder] = useState([]);
   const [selfOrder, setSelfOrder] = useState([]);
+  const [tkn, setTkn] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
   const [visible, setVisible] = useState(false);
+  
   const showDialog = () => setVisible(true);
   const hideDialog = () => setVisible(false);
   const [justification, setJustification] = useState({ value: "", error: "" });
   const [orderBeingCancelled, setOrderBeingCancelled] = useState(null);
+  const  [notifationsBool, setNotifationsBool] = useState(true);
 
+ const subscribeToNotifications = async () => {
+	  //Too tired to solve this... just deal with it for now
+	  if(!notifationsBool){
+		  
+			 messaging().subscribeToTopic(user.id).then().catch((error) => alert(error))
+		//alert("You will now receive notifications for new orders")
+	  }
+	  else{
+		  messaging().unsubscribeFromTopic(user.id).then().catch((error) => alert(error))
+  
+		  //alert("You will no longer receive notifications for new orders")
+	  }
+  }
+const fetchSettings= async () =>{
+	  await AsyncStorage.getItem("@notifationsBool").then((res) => {
+		  let k = res === "true";
+		  setNotifationsBool(k);
+	  }).catch((error) => alert(error));
+	}
+
+  
   //on drag down refresh page
   async function fetchPrivateInfo() {
     try {
@@ -63,6 +90,8 @@ export default function Dashboard({ route, navigation }) {
           if (snapshot.exists) {
             setUser({ ...snapshot.data(), id: userID });
           }
+		  
+		  
           await fetchDriverOrdersAPI(snapshot.id).then((orders) => {
             setSelfOrder(
               orders.docs.map((doc) => {
@@ -138,7 +167,9 @@ export default function Dashboard({ route, navigation }) {
   };
 
   const logout = (navigation) => {
+	messaging().unsubscribeFromTopic(user.id).then().catch((error) => alert(error))
     AsyncStorage.removeItem("@userData");
+
     navigation.replace("Login");
   };
 
@@ -155,17 +186,19 @@ export default function Dashboard({ route, navigation }) {
     setLoading(true);
     await fetchPrivateInfo();
     await getUnassignedOrders();
+	await fetchSettings();
     setLoading(false);
   }
 
   function viewOrderDetails(order) {
     navigation.navigate("OrderDetails", order);
   }
-
+  
   useEffect(() => {
     refresh();
+	subscribeToNotifications();
   }, []);
-
+  
   return (
     <SafeAreaView style={{ height: "100%" }}>
       <Provider style={styles.container}>
@@ -190,6 +223,7 @@ export default function Dashboard({ route, navigation }) {
               user && user.name ? user.name.split(" ")[0] : "... "
             }! 👋`}</Text>
             <View style={{ flexDirection: "row" }}>
+			
               <IconButton
                 style={{ marginRight: -2 }}
                 icon="account"
@@ -282,7 +316,6 @@ export default function Dashboard({ route, navigation }) {
               ></OrderList>
             </Card.Content>
           </Card>
-
           <Portal>
             <Dialog
               visible={visible}

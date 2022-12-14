@@ -8,6 +8,7 @@ import {
   DELIVERY_PROBLEM,
   READY_PICK_UP,
 } from "../utils/utils";
+import {Notifications} from 'react-native-notifications';
 
 export async function updateOrderAPI(order, newStatus, user, justification) {
   if (newStatus == DELIVERED || newStatus == DELIVERY_PROBLEM) {
@@ -117,7 +118,6 @@ export function getOrderStatusText(status) {
       return "Preparing";
   }
 }
-
 export function formatOrders(orderList) {
   return orderList.map((item) => {
     return {

@@ -14,6 +14,9 @@ import StatisticsScreen from "./src/screens/Statistics";
 import MapDirectionsScreen from "./src/screens/MapDirections";
 import ProfileScreen from "./src/screens/Profile";
 
+import NotificationHistoryScreen from "./src/screens/NotificationHistory";
+import firebase from '@react-native-firebase/app';
+import messaging from "@react-native-firebase/messaging"; 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -23,7 +26,15 @@ export default function App() {
   ]);
 
   const [initScreen, setInitScreen] = useState(null);
-
+  const requestNotificationPermission = async() =>{
+	const authStatus= await messaging().requestPermission();
+	const enabled=
+	authStatus=== messaging.AuthorizationStatus.AUTHORIZED ||
+	authStatus=== messaging.AuthorizationStatus.PROVISIONAL;
+	if(enabled){
+		console.log('Auth status:', authStatus); 
+	}
+  }	
   useEffect(() => {
     try {
       AsyncStorage.getItem("@userData").then((data) =>
@@ -33,7 +44,33 @@ export default function App() {
       console.log("AsyncStorage Error: ", e);
     }
   }, []);
-
+  useEffect(()=>{
+	if(requestNotificationPermission()){
+		messaging().getToken().then(token=>{
+			AsyncStorage.setItem("@fcmToken", token)
+		})
+	}else{
+		alert("Failed to acquire token for notifications: ", authStatus)
+	}
+	messaging().getInitialNotification().then(remoteMessage => { 
+		if (remoteMessage){
+			console.log("Notification opened app from quit", remoteMessage.notification);
+			//setInitialRoute(remoteMessage.data.type)
+		}
+		//setLoading(false); 
+	})
+	messaging().onNotificationOpenedApp(remoteMessage=>{
+		console.log("Notification opened app from background", remoteMessage.notification)
+	})
+	messaging().setBackgroundMessageHandler(async remoteMessage=>{
+		console.log('Message Handled in the background!', remoteMessage)
+	})
+	const unsub = messaging().onMessage(async remoteMessage=>{
+		console.log('A new FCM message arrived', JSON.stringify(remoteMessage))
+	})
+	return unsub; 
+  }, [])
+  
   if (initScreen === null) return;
 
   return (
@@ -64,6 +101,7 @@ export default function App() {
               component={ProfileScreen}
               options={{ title: "Profile" }}
             />
+			<Stack.Screen name="NotificationHistory" options={{ title: "Notification History" }} component={NotificationHistoryScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </ToastProvider>

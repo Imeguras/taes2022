@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "FasTugaDriver",
-    "slug": "FasTugaDriver",
+    "slug": "taes",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -21,13 +21,16 @@
       "supportsTablet": true
     },
     "android": {
+      "googleServicesFile": "./google-services.json", 
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.grupoDD.FasTugaDriver",
       "config": {
-        "googleMaps": { "apiKey": "AIzaSyBDg9iVKHgE7xKL-JTH-Z6p8b5zs1cbGDc" }   
+        "googleMaps": {
+          "apiKey": "AIzaSyBDg9iVKHgE7xKL-JTH-Z6p8b5zs1cbGDc"
+        }
       },
       "permissions": [
         "ACCESS_FINE_LOCATION",
@@ -40,8 +43,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "461c08b5-95ae-4cb9-b274-45de559e560c"
+        "projectId": "f6b33ef1-7e2c-4cbf-913b-396c473cc3bc"
       }
-    }
+    },
+    "owner": "imeguras"
   }
 }

@@ -14,3 +14,8 @@ web-build/
 # macOS
 .DS_Store
 package-lock.json
+firebase-fun/index.js
+
+firebase-fun/privatekey.json
+
+firebase-fun/clean.js
